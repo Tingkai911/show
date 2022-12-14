@@ -28,14 +28,14 @@ public class CommandLineTaskExecutor implements CommandLineRunner {
             String line = scanner.nextLine().trim();
 
             List<String> params = Arrays.asList(line.split("\\s+"));
-            if(params.size() == 0) {
+            if (params.size() == 0) {
                 System.out.println("Invalid command");
             }
 
             String user;
             switch (params.get(0)) {
                 case "setup":
-                    if(params.size() != 5) {
+                    if (params.size() != 5) {
                         System.out.println("Invalid command, required 5 parameters, provided " + params.size());
                     }
                     System.out.println("Password:");
@@ -43,7 +43,7 @@ public class CommandLineTaskExecutor implements CommandLineRunner {
                     adminController.setup(user, params.get(1), params.get(2), params.get(3), params.get(4));
                     break;
                 case "view":
-                    if(params.size() != 2) {
+                    if (params.size() != 2) {
                         System.out.println("Invalid command, require 2 parameters, provided " + params.size());
                     }
                     System.out.println("Password:");
@@ -51,19 +51,19 @@ public class CommandLineTaskExecutor implements CommandLineRunner {
                     adminController.view(user, params.get(1));
                     break;
                 case "availability":
-                    if(params.size() != 2) {
+                    if (params.size() != 2) {
                         System.out.println("Invalid command, require 2 parameters, provided " + params.size());
                     }
                     buyerController.availability(params.get(1));
                     break;
                 case "book":
-                    if(params.size() != 4) {
+                    if (params.size() != 4) {
                         System.out.println("Invalid command, require 4 parameters, provided " + params.size());
                     }
                     buyerController.book(params.get(1), params.get(2), params.get(3));
                     break;
                 case "cancel":
-                    if(params.size() != 3) {
+                    if (params.size() != 3) {
                         System.out.println("Invalid command, require 3 parameters, provided " + params.size());
                     }
                     buyerController.cancel(params.get(1), params.get(2));
@@ -72,7 +72,7 @@ public class CommandLineTaskExecutor implements CommandLineRunner {
                     // WARNING! This will clear all in-memory data.
                     System.out.println("Are you sure? (y/n)");
                     String choice = scanner.nextLine().trim();
-                    if(choice.equalsIgnoreCase("y")){
+                    if (choice.equalsIgnoreCase("y")) {
                         System.exit(1);
                     }
                 default:

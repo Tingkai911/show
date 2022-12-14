@@ -24,8 +24,8 @@ public class Show {
         this.bookings = new ConcurrentHashMap<>();
 
         this.seatStatusMap = new ConcurrentHashMap<>();
-        for(int i = 0; i < numRows; i++) {
-            for(int j = 0; j < numSeatsPerRow; j++) {
+        for (int i = 0; i < numRows; i++) {
+            for (int j = 0; j < numSeatsPerRow; j++) {
                 StringBuilder sb = new StringBuilder();
                 sb.append(Character.toString((char) 'A' + i));
                 sb.append(j + 1);

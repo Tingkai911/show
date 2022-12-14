@@ -19,7 +19,7 @@ public class AdminController {
     private AdminUsersConfig adminUsersConfig;
 
     public void setup(String user, String showNumber, String numRows, String numSeatsPerRow, String cancellationWindowMinutes) {
-        if(!adminUsersConfig.getUsers().contains(user)) {
+        if (!adminUsersConfig.getUsers().contains(user)) {
             System.out.println("Unauthorized");
             return;
         }
@@ -36,7 +36,7 @@ public class AdminController {
     }
 
     public void view(String user, String showNumber) {
-        if(!adminUsersConfig.getUsers().contains(user)) {
+        if (!adminUsersConfig.getUsers().contains(user)) {
             System.out.println("Unauthorized");
             return;
         }
@@ -47,8 +47,8 @@ public class AdminController {
             StringBuilder sb = new StringBuilder();
             Show show = adminService.viewShow(showNumber);
             sb.append("show#, ticket#, buyer phone#, seat#\n");
-            for(Map.Entry<String, Booking> booking : show.getBookings().entrySet()) {
-                for(Map.Entry<String, Ticket> ticket : booking.getValue().getTickets().entrySet()) {
+            for (Map.Entry<String, Booking> booking : show.getBookings().entrySet()) {
+                for (Map.Entry<String, Ticket> ticket : booking.getValue().getTickets().entrySet()) {
                     sb.append(booking.getValue().getShowId())
                             .append(", ")
                             .append(ticket.getValue().getId())

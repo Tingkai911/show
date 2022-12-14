@@ -22,7 +22,7 @@ public class BuyerController {
             List<String> availableSeats = buyerService.getShowAvailableSeats(showNumber);
             StringBuilder sb = new StringBuilder();
             sb.append("Available Seats: ");
-            for(String seatNo : availableSeats) {
+            for (String seatNo : availableSeats) {
                 sb.append(seatNo).append(", ");
             }
             System.out.println(sb.toString());
@@ -40,7 +40,7 @@ public class BuyerController {
             StringBuilder sb = new StringBuilder();
             sb.append("Successfully booked the following shows\n");
             sb.append("show#, ticket#, buyer phone#, seat#\n");
-            for(Ticket ticket : tickets) {
+            for (Ticket ticket : tickets) {
                 sb.append(ticket.getShowId())
                         .append(", ")
                         .append(ticket.getId())

@@ -40,9 +40,10 @@ public class BuyerControllerTest {
     private BuyerService buyerService;
 
     private static boolean initialised = false;
+
     @BeforeEach
     public void init() throws Exception {
-        if(initialised) {
+        if (initialised) {
             return;
         }
         Show show = new Show("1", 10, 10, 120000);
@@ -66,12 +67,12 @@ public class BuyerControllerTest {
         UUID ticketId2 = UUID.fromString("96bb18c0-86c6-446e-884d-37550247d49d");
 
         ZonedDateTime currentTime =
-                ZonedDateTime.of(2022,1,1,0,0,0,0, ZoneId.of("UTC+8"));
+                ZonedDateTime.of(2022, 1, 1, 0, 0, 0, 0, ZoneId.of("UTC+8"));
         Clock currentClock =
                 Clock.fixed(currentTime.toInstant(), ZoneId.of("UTC+8"));
 
-        try(MockedStatic<UUID> mockUUID = Mockito.mockStatic(UUID.class);
-            MockedStatic<Clock> mockClock = Mockito.mockStatic(Clock.class)) {
+        try (MockedStatic<UUID> mockUUID = Mockito.mockStatic(UUID.class);
+             MockedStatic<Clock> mockClock = Mockito.mockStatic(Clock.class)) {
             mockUUID.when(UUID::randomUUID).thenReturn(bookingId, ticketId1, ticketId2);
             mockClock.when(Clock::systemUTC).thenReturn(currentClock);
 
@@ -86,10 +87,12 @@ public class BuyerControllerTest {
             Assertions.assertEquals("123", phoneNumberCaptor.getValue());
             assertThat(Arrays.asList("A1", "A2")).hasSameElementsAs(seatsArgumentCaptor.getValue());
 
-            ArgumentCaptor<Show> showArgumentCaptor = ArgumentCaptor.forClass(Show.class);
-            ArgumentCaptor<List<String>> ticketIdsCaptor = ArgumentCaptor.forClass(List.class);
+            ArgumentCaptor<String> showNoCaptor = ArgumentCaptor.forClass(String.class);
+            ArgumentCaptor<String> phoneNoCaptor = ArgumentCaptor.forClass(String.class);
+            ArgumentCaptor<Booking> bookingArgumentCaptor = ArgumentCaptor.forClass(Booking.class);
             Mockito.verify(inMemoryDataStorage, Mockito.times(1))
-                    .addNewTicketsToShow(showArgumentCaptor.capture(), ticketIdsCaptor.capture());
+                    .addNewBookingToShow(showNoCaptor.capture(), phoneNoCaptor.capture(), bookingArgumentCaptor.capture());
+
             Show expected = new Show("1", 10, 10, 120000);
             Booking booking = new Booking(bookingId.toString(), "1", "123", Instant.now().toEpochMilli());
             Ticket ticket = new Ticket(ticketId1.toString(), "A1", "1", bookingId.toString());
@@ -99,7 +102,11 @@ public class BuyerControllerTest {
             expected.getBookings().put("123", booking);
             expected.getSeatStatusMap().put("A1", SeatStatus.OCCUPIED);
             expected.getSeatStatusMap().put("A2", SeatStatus.OCCUPIED);
-            Assertions.assertEquals(expected, showArgumentCaptor.getValue());
+
+            Assertions.assertEquals("1", showNoCaptor.getValue());
+            Assertions.assertEquals("123", phoneNoCaptor.getValue());
+            Assertions.assertEquals(booking, bookingArgumentCaptor.getValue());
+            Assertions.assertEquals(expected, inMemoryDataStorage.getShow("1"));
         }
     }
 
@@ -112,11 +119,11 @@ public class BuyerControllerTest {
         UUID ticketId2 = UUID.fromString("96bb18c0-86c6-446e-884d-37550247d49d");
 
         ZonedDateTime currentTime =
-                ZonedDateTime.of(2022,1,1,0,0,0,0, ZoneId.of("UTC+8"));
+                ZonedDateTime.of(2022, 1, 1, 0, 0, 0, 0, ZoneId.of("UTC+8"));
         Clock currentClock =
                 Clock.fixed(currentTime.toInstant(), ZoneId.of("UTC+8"));
 
-        try(MockedStatic<Clock> mockClock = Mockito.mockStatic(Clock.class)) {
+        try (MockedStatic<Clock> mockClock = Mockito.mockStatic(Clock.class)) {
             mockClock.when(Clock::systemUTC).thenReturn(currentClock);
 
             // cancel ticketId1 (seat A1)
@@ -124,19 +131,16 @@ public class BuyerControllerTest {
 
             Mockito.verify(buyerService, Mockito.times(1))
                     .cancelTicket(ticketId1.toString(), "123");
-
-            ArgumentCaptor<Show> showArgumentCaptor = ArgumentCaptor.forClass(Show.class);
-            ArgumentCaptor<String> ticketIdCaptor = ArgumentCaptor.forClass(String.class);
             Mockito.verify(inMemoryDataStorage, Mockito.times(1))
-                    .removeTicketFromShow(showArgumentCaptor.capture(), ticketIdCaptor.capture());
+                    .removeTicketFromShow("1", "123", ticketId1.toString());
+
             Show expected = new Show("1", 10, 10, 120000);
             Booking booking = new Booking(bookingId.toString(), "1", "123", Instant.now().toEpochMilli());
             Ticket ticket = new Ticket(ticketId2.toString(), "A2", "1", bookingId.toString());
             booking.getTickets().put(ticketId2.toString(), ticket);
             expected.getBookings().put("123", booking);
             expected.getSeatStatusMap().put("A2", SeatStatus.OCCUPIED);
-            Assertions.assertEquals(expected, showArgumentCaptor.getValue());
-            Assertions.assertEquals(ticketId1.toString(), ticketIdCaptor.getValue());
+            Assertions.assertEquals(expected, inMemoryDataStorage.getShow("1"));
         }
     }
 
@@ -172,10 +176,10 @@ public class BuyerControllerTest {
 
         // Exceed cancellation time window
         ZonedDateTime currentTime =
-                ZonedDateTime.of(2022,1,1,1,0,0,0, ZoneId.of("UTC+8"));
+                ZonedDateTime.of(2022, 1, 1, 1, 0, 0, 0, ZoneId.of("UTC+8"));
         Clock currentClock =
                 Clock.fixed(currentTime.toInstant(), ZoneId.of("UTC+8"));
-        try(MockedStatic<Clock> mockClock = Mockito.mockStatic(Clock.class)) {
+        try (MockedStatic<Clock> mockClock = Mockito.mockStatic(Clock.class)) {
             mockClock.when(Clock::systemUTC).thenReturn(currentClock);
             buyerController.cancel(ticketId2.toString(), "123");
             Assertions.assertThrows(InvalidCancellationException.class, () -> buyerService.cancelTicket(ticketId2.toString(), "123"));

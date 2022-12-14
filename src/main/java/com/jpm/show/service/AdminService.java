@@ -18,7 +18,7 @@ public class AdminService {
     public SeatConstrainsConfig seatConstrainsConfig;
 
     public void addShow(String showNumber, int numRows, int numSeatsPerRow, long cancellationWindowMinutes) throws Exception {
-        if(numRows > seatConstrainsConfig.getMaxRows() || numSeatsPerRow > seatConstrainsConfig.getMaxSeatsPerRow()
+        if (numRows > seatConstrainsConfig.getMaxRows() || numSeatsPerRow > seatConstrainsConfig.getMaxSeatsPerRow()
                 || numRows <= 0 || numSeatsPerRow <= 0) {
             throw new InvalidShowException("Number of seats more than the allowed limit");
         }
