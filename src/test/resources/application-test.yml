@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: show
+
+constrains:
+  seats:
+    maxRows: 26
+    maxSeatsPerRow: 10
+
+admin:
+  users:
+    - test123
