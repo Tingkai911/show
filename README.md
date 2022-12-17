@@ -53,3 +53,5 @@ To run and check unit test coverage:
 3) navigate to "jacoco-ut" and open index.html in chrome
 
 ![Design](https://raw.githubusercontent.com/Tingkai911/show/main/jpm.drawio.png)
+
+![Use Case](https://raw.githubusercontent.com/Tingkai911/show/main/usecase.png)
