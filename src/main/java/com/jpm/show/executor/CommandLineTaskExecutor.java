@@ -30,6 +30,7 @@ public class CommandLineTaskExecutor implements CommandLineRunner {
             List<String> params = Arrays.asList(line.split("\\s+"));
             if (params.size() == 0) {
                 System.out.println("Invalid command");
+                continue;
             }
 
             String user;
