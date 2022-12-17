@@ -51,3 +51,5 @@ To run and check unit test coverage:
 1) mvn clean test
 2) navigate to "target" folder
 3) navigate to "jacoco-ut" and open index.html in chrome
+
+![Design](https://raw.githubusercontent.com/Tingkai911/show/main/jpm.drawio.png)
