@@ -18,6 +18,7 @@ public class BuyerController {
     public void availability(String showNumber) {
         try {
             System.out.printf("Processing \"availability %s\"\n", showNumber);
+            log.info(String.format("Processing \"availability %s\"", showNumber));
 
             List<String> availableSeats = buyerService.getShowAvailableSeats(showNumber);
             StringBuilder sb = new StringBuilder();
@@ -25,15 +26,19 @@ public class BuyerController {
             for (String seatNo : availableSeats) {
                 sb.append(seatNo).append(", ");
             }
+
             System.out.println(sb.toString());
+            log.info(sb.toString());
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
+            log.error("Error: " + e.getMessage());
         }
     }
 
     public void book(String showNumber, String phoneNumber, String seatNumberCommand) {
         try {
             System.out.printf("Processing \"book %s %s %s\"\n", showNumber, phoneNumber, seatNumberCommand);
+            log.info(String.format("Processing \"book %s %s %s\"", showNumber, phoneNumber, seatNumberCommand));
 
             List<String> seatNumbers = Arrays.asList(seatNumberCommand.split(","));
             List<Ticket> tickets = buyerService.bookShow(showNumber, phoneNumber, seatNumbers);
@@ -50,19 +55,27 @@ public class BuyerController {
                         .append(ticket.getSeatNo())
                         .append("\n");
             }
+
             System.out.println(sb.toString());
+            log.info(sb.toString());
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
+            log.error("Error: " + e.getMessage());
         }
     }
 
     public void cancel(String ticketNumber, String phoneNumber) {
         try {
             System.out.printf("Processing \"cancel %s %s\"\n", ticketNumber, phoneNumber);
+            log.info(String.format("Processing \"cancel %s %s\"", ticketNumber, phoneNumber));
+
             buyerService.cancelTicket(ticketNumber, phoneNumber);
+
             System.out.println("Ticket No is canceled: " + ticketNumber);
+            log.info("Ticket No is canceled: " + ticketNumber);
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
+            log.error("Error: " + e.getMessage());
         }
     }
 }
