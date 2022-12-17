@@ -37,6 +37,7 @@ public class CommandLineTaskExecutor implements CommandLineRunner {
                 case "setup":
                     if (params.size() != 5) {
                         System.out.println("Invalid command, required 5 parameters, provided " + params.size());
+                        break;
                     }
                     System.out.println("Password:");
                     user = scanner.nextLine().trim();
@@ -45,6 +46,7 @@ public class CommandLineTaskExecutor implements CommandLineRunner {
                 case "view":
                     if (params.size() != 2) {
                         System.out.println("Invalid command, require 2 parameters, provided " + params.size());
+                        break;
                     }
                     System.out.println("Password:");
                     user = scanner.nextLine().trim();
@@ -53,18 +55,21 @@ public class CommandLineTaskExecutor implements CommandLineRunner {
                 case "availability":
                     if (params.size() != 2) {
                         System.out.println("Invalid command, require 2 parameters, provided " + params.size());
+                        break;
                     }
                     buyerController.availability(params.get(1));
                     break;
                 case "book":
                     if (params.size() != 4) {
                         System.out.println("Invalid command, require 4 parameters, provided " + params.size());
+                        break;
                     }
                     buyerController.book(params.get(1), params.get(2), params.get(3));
                     break;
                 case "cancel":
                     if (params.size() != 3) {
                         System.out.println("Invalid command, require 3 parameters, provided " + params.size());
+                        break;
                     }
                     buyerController.cancel(params.get(1), params.get(2));
                     break;
@@ -75,6 +80,7 @@ public class CommandLineTaskExecutor implements CommandLineRunner {
                     if (choice.equalsIgnoreCase("y")) {
                         System.exit(1);
                     }
+                    break;
                 default:
                     System.out.println("Invalid command, refer to README.md");
             }
